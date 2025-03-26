@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*text*/
+.input-text {
+    @apply text-grey-800 text-base;
+}
+
+.input-disable-text {
+    @apply text-grey-400 pointer-events-none text-base-m;
+}
+
+.error-text {
+    @apply text-error text-sm-normal mt-2;
+}
+
+/*border*/
+.input-filter-border {
+    @apply rounded-md;
+}
+
+.input-border {
+    @apply border border-grey-400 rounded-md;
+}
+
+/*box*/
+.input-filter-box {
+    @apply w-full h-[40px] bg-grey-200;
+}
+
+.input-box {
+    @apply w-full h-[40px];
+}
+
+.input-auth-box {
+    @apply w-full h-[48px];
+}
+
+.textarea-box {
+    @apply w-full p-4;
+}
+
+/*placeholder*/
+.input-filter-box::placeholder {
+    @apply text-grey-500 text-base  not-italic ;
+}
+
+.input-box::placeholder {
+    @apply text-grey-500 text-base italic ;
+}
+
+.input-auth-box::placeholder {
+    @apply text-grey-500 text-base italic ;
+}
+
+.textarea-box::placeholder {
+    @apply text-grey-500 text-base italic ;
+}
+
+.placeholder__text {
+    @apply text-grey-500 text-base ;
+}
+
+* {
+    font-family: "Quicksand", sans-serif;
+}

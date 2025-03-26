@@ -1,0 +1,24 @@
+export const ARROW_DOWN = 'arrow_down';
+export const NEXT_BREADCRUMB = 'next_breadcrumb';
+export const AVATAR_DEFAULT = 'AVATAR_DEFAULT';
+export const LOGOUT = 'logout';
+export const PENCIL = 'pencil';
+export const DELETE = 'delete';
+export const IMAGE = 'image';
+export const FACILITY = 'facility';
+export const REVIEWS = 'reviews';
+export const ROOMS = 'rooms';
+export const PAGE = 'page';
+export const SEND = 'send';
+export const STATISTICAL = 'statistical';
+export const TOAST_SUCCESS = 'TOAST_SUCCESS';
+export const TOAST_ERROR = 'TOAST_ERROR';
+export const ICON_CLOSE = 'ICON_CLOSE';
+export const CONTRACT = 'contract';
+export const HUMAN = 'human';
+export const TASK = 'task';
+// constants
+export const VILLA = 'villa';
+export const ACTIVE = true;
+export const INACTIVE = false;
+export const ADMINVILLA =  'adminVilla';
