@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import axiosConfig from "../services/api.ts";
 import { API } from "@/utils/api.ts";
-import { useAuthStore } from "@/stores/auth";
 
 interface OrderState {
   list_order: any[];
@@ -21,17 +20,10 @@ export const useOrder = defineStore("order", {
   }),
 
   actions: {
-    getAuthHeaders() {
-      const auth = useAuthStore();
-      return { Authorization: `Bearer ${auth.accessToken}` };
-    },
-
     async get_list(params: any) {
       try {
-        const { data } = await axiosConfig.get(API.ORDER, {
-          params,
-          headers: this.getAuthHeaders(),
-        });
+        const { data , config } = await axiosConfig.get(API.ORDER, { params });
+        console.log("📡 Headers gửi đi:", config.headers);
 
         if (data.status === 1) {
           this.list_order = data.data.orders;
@@ -51,9 +43,7 @@ export const useOrder = defineStore("order", {
 
     async get_detail(orderId: string) {
       try {
-        const { data } = await axiosConfig.get(`${API.ORDER_DETAIL}/${orderId}`, {
-          headers: this.getAuthHeaders(),
-        });
+        const { data } = await axiosConfig.get(`${API.ORDER_DETAIL}/${orderId}`);
 
         this.detail_order = data.status === 1 ? data.data : {};
         this.errorMessage = data.status === 1 ? null : data.message;
@@ -66,9 +56,7 @@ export const useOrder = defineStore("order", {
 
     async create(payload: any) {
       try {
-        const { data } = await axiosConfig.post(API.ORDER_CREATE, payload, {
-          headers: this.getAuthHeaders(),
-        });
+        const { data } = await axiosConfig.post(API.ORDER_CREATE, payload);
 
         this.lastCreatedOrder = data.status === 1 ? data.data : null;
         this.errorMessage = data.status === 1 ? null : data.message;

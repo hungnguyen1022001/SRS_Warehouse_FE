@@ -14,6 +14,9 @@ instance.interceptors.request.use(
    async (config: any) => {
       const accessToken = JwtService.getToken();
       config.headers['Authorization'] = `Bearer ${accessToken}`;
+      if (!config.headers["Content-Type"]) {
+         config.headers["Content-Type"] = "application/json";
+      }
 
       return config;
    },

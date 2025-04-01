@@ -9,13 +9,22 @@ interface User {
     warehouseId: string;
 }
 
-interface Auth {
+interface AuthState {
     user: User | null;
     isAuthenticated: boolean;
 }
 
+interface LoginResponse {
+    status: number;
+    accessToken: string;
+    refreshToken: string;
+    userId: string;
+    username: string;
+    warehouseId: string;
+}
+
 export const useAuthStore = defineStore("auth", {
-    state: (): Auth => ({
+    state: (): AuthState => ({
         user: null,
         isAuthenticated: !!JwtService.getToken(),
     }),
@@ -26,13 +35,12 @@ export const useAuthStore = defineStore("auth", {
     },
 
     actions: {
-        /** 🔐 Đăng nhập */
         async login(payload: any, router: any) {
             try {
-                const { data } = await axiosConfig.post(API.LOGIN, payload);
-                console.log("🚀 API Response:", data);
+                const response = await axiosConfig.post<LoginResponse>(API.LOGIN, payload);
+                const data = response.data;
 
-                if (data && data.status === 1) {
+                if (data?.status === 1) {
                     this.user = {
                         userId: data.userId,
                         name: data.username,
@@ -40,10 +48,14 @@ export const useAuthStore = defineStore("auth", {
                     };
 
                     JwtService.saveToken(data.accessToken, data.refreshToken);
-                    JwtService.saveUserData(data.username, data.userId, data.warehouseId);
+                    JwtService.saveUserData({
+                        userId: data.userId,
+                        name: data.username,
+                        warehouseId: data.warehouseId,
+                    });
                     this.isAuthenticated = true;
 
-                    await router.push("/"); // ✅ Chuyển hướng sau khi đăng nhập
+                    await router.push("/");
                 }
                 return data;
             } catch (error) {
@@ -52,16 +64,14 @@ export const useAuthStore = defineStore("auth", {
             }
         },
 
-        /** 🚪 Đăng xuất */
         logout(router: any) {
             JwtService.destroyToken();
             JwtService.destroyUserData();
             this.user = null;
             this.isAuthenticated = false;
-            router.push("/login"); // ✅ Chuyển hướng về login
+            router.push("/login");
         },
 
-        /** 🔄 Kiểm tra trạng thái đăng nhập */
         checkAuth() {
             this.isAuthenticated = !!JwtService.getToken();
         },
