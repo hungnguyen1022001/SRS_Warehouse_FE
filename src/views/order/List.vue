@@ -155,7 +155,7 @@ const fetchOrders = async (resetPage = false) => {
 
     const params = {
         page: state.pagination.page - 1,
-        size: state.pagination.limit,
+        limit: state.pagination.limit,
         warehouseId: state.selectedFilters.warehouseId || undefined,
         status: state.selectedFilters.status || undefined,
         orderId: state.selectedFilters.orderId || undefined,

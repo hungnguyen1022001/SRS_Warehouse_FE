@@ -39,19 +39,20 @@ export const useAuthStore = defineStore("auth", {
             try {
                 const response = await axiosConfig.post<LoginResponse>(API.LOGIN, payload);
                 const data = response.data;
+                const user =response.data.data;
 
                 if (data?.status === 1) {
                     this.user = {
-                        userId: data.userId,
-                        name: data.username,
-                        warehouseId: data.warehouseId,
+                        userId: user.userId,
+                        name: user.username,
+                        warehouseId: user.warehouseId,
                     };
 
-                    JwtService.saveToken(data.accessToken, data.refreshToken);
+                    JwtService.saveToken(user.accessToken, user.refreshToken);
                     JwtService.saveUserData({
-                        userId: data.userId,
-                        name: data.username,
-                        warehouseId: data.warehouseId,
+                        userId: user.userId,
+                        name: user.username,
+                        warehouseId: user.warehouseId,
                     });
                     this.isAuthenticated = true;
 

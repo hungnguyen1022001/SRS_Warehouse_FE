@@ -9,6 +9,7 @@ const instance = axios.create({
    baseURL: import.meta.env.VITE_URL_API,
 });
 
+
 // Create a request interceptor for my instance and get accessToken on the fly
 instance.interceptors.request.use(
    async (config: any) => {
