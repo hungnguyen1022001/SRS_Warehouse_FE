@@ -26,8 +26,8 @@ export const useOrder = defineStore("order", {
         console.log("📡 Headers gửi đi:", config.headers);
 
         if (data.status === 1) {
-          this.list_order = data.data.orders;
-          this.total = data.data.total;
+          this.list_order = data.data.content;
+          this.total = data.data.totalElements;
           this.errorMessage = null;
         } else {
           this.list_order = [];
