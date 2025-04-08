@@ -79,45 +79,54 @@ const importOrders = async () => {
       headers: {
         'Content-Type': 'multipart/form-data'
       },
-      responseType: 'blob' 
+      responseType: 'blob'
     });
-
+    console.log("response",response);
+    const contentType = response.headers['content-type'];
     const contentDisposition = response.headers['content-disposition'];
-    const isAttachment = contentDisposition && contentDisposition.includes('attachment');
+
+    const isAttachment = contentDisposition?.includes('attachment');
+    const isJson = contentType?.includes('application/json');
 
     if (isAttachment) {
-      // 🧠 Extract filename from content-disposition header
+      // ✅ Handle file download
       const matches = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^;"']+)["']?/);
       const decodedFileName = matches && decodeURIComponent(matches[1]);
 
       const blob = new Blob([response.data], {
-        type: response.headers['content-type'] || 'application/octet-stream'
+        type: contentType || 'application/octet-stream'
       });
 
-      const downloadUrl = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = downloadUrl;
+      a.href = url;
       a.download = decodedFileName || 'Import_Error.xlsx';
       document.body.appendChild(a);
       a.click();
       a.remove();
-      URL.revokeObjectURL(downloadUrl);
+      URL.revokeObjectURL(url);
 
       toast.setMessagePopupError('⚠️ File có lỗi! Vui lòng kiểm tra.');
-    } else {
-      // Handle JSON response in case of success
+    } else if (isJson) {
+      // ✅ Parse the JSON response safely
       const reader = new FileReader();
       reader.onload = function () {
-        const text = reader.result as string;
-        const resData = JSON.parse(text);
+        try {
+          const resData = JSON.parse(reader.result as string);
 
-        if (resData?.status === 1) {
-          toast.setMessageSuccess(resData.message || '✅ Import thành công!');
-        } else {
-          toast.setMessagePopupError(resData.message || '❌ Import thất bại!');
+          if (resData?.status === 1) {
+            toast.setMessageSuccess(resData.message || '✅ Import thành công!');
+          } else {
+            toast.setMessagePopupError(resData.message || '❌ Import thất bại!');
+          }
+        } catch (err) {
+          console.error('JSON parse error:', err);
+          toast.setMessagePopupError('⚠️ Lỗi không xác định trong phản hồi!');
         }
       };
       reader.readAsText(response.data);
+    } else {
+      toast.setMessagePopupError('⚠️ Không thể xác định kiểu phản hồi!');
     }
   } catch (err) {
     console.error(err);
