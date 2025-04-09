@@ -38,28 +38,35 @@ export const useOrderService = () => {
       toast.setMessagePopupError("❌ Vui lòng chọn ít nhất 1 đơn hàng để xuất!");
       return false;
     }
-
+  
     try {
       toast.setMessageSuccess("📤 Đang xuất nhãn đơn hàng...");
-
+  
       const response = await axiosConfig.post(`${API.ORDER_LABEL}`, orderIds, {
         responseType: 'blob',
       });
-
+  
+    
       const contentDisposition = response.headers['content-disposition'];
-      const match = contentDisposition?.match(/filename="(.+?)"/);
-      const fileName = match ? match[1] : `Labels_${new Date().toISOString().slice(0, 10)}.xlsx`;
-
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const match = contentDisposition?.match(/filename="?([^"]+)"?/);
+      const fileName = match
+        ? decodeURIComponent(match[1])
+        : `Labels_${new Date().toISOString().slice(0, 10)}.xlsx`;
+  
+      
+      const blob = new Blob([response.data], {
+        type: 'application/octet-stream',
+      });
+  
       const url = window.URL.createObjectURL(blob);
-
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
+      window.URL.revokeObjectURL(url); // Clean up!
+  
       toast.setMessageSuccess("✅ Xuất nhãn đơn hàng thành công!");
       return true;
     } catch (error) {
@@ -68,6 +75,7 @@ export const useOrderService = () => {
       return false;
     }
   };
+  
 
   /**
    * Import đơn hàng từ file Excel

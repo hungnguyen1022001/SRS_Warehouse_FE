@@ -13,7 +13,8 @@ export const API = {
     ORDER_DISPATCH: "api/orders/dispatch",
     ORDER_LABEL: "api/orders/export-labels",
     ORDER_LIST: "api/orders/ids",
-    WAREHOUSE_LIST :"api/warehouses/ids"
+    WAREHOUSE_LIST :"api/warehouses/ids",
+    ORDER_REPORT: "api/report/export"
   
     
   };

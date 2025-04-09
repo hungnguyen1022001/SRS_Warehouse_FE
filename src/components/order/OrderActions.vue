@@ -15,6 +15,11 @@
           📦 Xuất Đơn Hàng
         </button>
       </div>
+      <div class="bg-white shadow-md rounded-md p-3 border border-gray-200">
+  <button @click="$emit('export-report')" class="w-full px-3 py-2 bg-indigo-500 text-sm rounded-md hover:bg-indigo-600 transition">
+    📊 Xuất Thống Kê
+  </button>
+</div>
     </div>
   </template>
   

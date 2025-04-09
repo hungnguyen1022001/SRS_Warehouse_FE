@@ -84,6 +84,7 @@ const importOrders = async () => {
     console.log("response",response);
     const contentType = response.headers['content-type'];
     const contentDisposition = response.headers['content-disposition'];
+    console.log(contentDisposition);
 
     const isAttachment = contentDisposition?.includes('attachment');
     const isJson = contentType?.includes('application/json');
