@@ -1,11 +1,10 @@
-// 📁 src/stores/orderStore.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import axiosConfig from '@/services/api';
 import { API } from '@/utils/api';
 import { toastStore } from '@/stores/toasted';
 
-export const useOrderStore = defineStore('order', () => {
+export const useOrderExportStore = defineStore('order-export', () => {
   const toast = toastStore();
 
   const showExportModal = ref(false);
